@@ -1,0 +1,165 @@
+@let myProduct = product();
+
+<div class="page">
+  <mat-card class="section">
+    <mat-card-header>
+      <mat-card-title>Rechercher un produit</mat-card-title>
+      <mat-card-subtitle>
+        Recherchez un produit à partir de son code-barres
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="search-row">
+        <mat-form-field appearance="outline" class="barcode-field">
+          <mat-label>Code-barres</mat-label>
+
+          <input
+            matInput
+            #barcode
+            type="text"
+            placeholder="Ex. 3017624010701"
+            (keyup.enter)="searchProduct(barcode.value)"
+          />
+        </mat-form-field>
+
+        @if (!searching()) {
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="searchProduct(barcode.value)"
+          >
+            <mat-icon>search</mat-icon>
+            Rechercher
+          </button>
+        }
+      </div>
+
+      @if (searching()) {
+        <mat-spinner diameter="40"></mat-spinner>
+      }
+
+      @if (errorMessage()) {
+        <p class="error-message">
+          {{ errorMessage() }}
+        </p>
+      }
+
+      @if (myProduct) {
+        <div class="product-result">
+          <img
+            class="product-image"
+            [src]="myProduct.image_front_url"
+            [alt]="myProduct.product_name"
+          />
+
+          <div class="product-info">
+            @if (myProduct.brands) {
+              <span class="product-brand">
+                {{ myProduct.brands }}
+              </span>
+            }
+
+            <h2>{{ myProduct.product_name }}</h2>
+
+            @if (myProduct.categories) {
+              <span class="product-category">
+                {{ myProduct.categories }}
+              </span>
+            }
+
+            <span class="barcode">
+              {{ myProduct.code }}
+            </span>
+
+            @if (myProduct.nutriscore_grade) {
+              <span>
+                Nutriscore :
+                {{ myProduct.nutriscore_grade | uppercase }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  @if (myProduct) {
+    <mat-card class="section">
+      <mat-card-header>
+        <mat-card-title>Ajouter au stock</mat-card-title>
+        <mat-card-subtitle>
+          Définissez les informations de stockage
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="stock-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantité</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              [(ngModel)]="quantity"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Unité</mat-label>
+
+            <mat-select [(ngModel)]="unit">
+              <mat-option value="piece">Pièce</mat-option>
+              <mat-option value="kg">Kilogramme</mat-option>
+              <mat-option value="g">Gramme</mat-option>
+              <mat-option value="l">Litre</mat-option>
+              <mat-option value="cl">Centilitre</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Péremption</mat-label>
+
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="expirationDate"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Seuil minimum</mat-label>
+
+            <input
+              matInput
+              type="number"
+              min="0"
+              [(ngModel)]="minThreshold"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Emplacement</mat-label>
+
+            <mat-select [(ngModel)]="storagePlace">
+              <mat-option value="closet">Placard</mat-option>
+              <mat-option value="fridge">Réfrigérateur</mat-option>
+              <mat-option value="freezer">Congélateur</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="add-button">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="addProduct()"
+          >
+            <mat-icon>add</mat-icon>
+            Ajouter au stock
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
