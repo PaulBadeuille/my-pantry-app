@@ -16,7 +16,7 @@ export interface MyPantryProduct {
   product: OpenFoodFactsProduct;
   quantity: number;
   unit: 'piece' | 'kg' | 'g' | 'l' | 'cl';
-  expirationDate:Date
-  minThreshold:number;
-  storagePlace:'closet'|'fridge'|'freezer'
+  expirationDate: Date;
+  minThreshold: number;
+  storagePlace: 'closet' | 'fridge' | 'freezer';
 }
